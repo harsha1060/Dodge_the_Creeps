@@ -1,0 +1,73 @@
+[gd_scene load_steps=9 format=3 uid="uid://dquqvwlnxifvv"]
+
+[ext_resource type="Script" path="res://Scripts/main.gd" id="1_xyyar"]
+[ext_resource type="PackedScene" uid="uid://cq1m4cigfht71" path="res://Scenes/Mob.tscn" id="2_g6vkr"]
+[ext_resource type="PackedScene" uid="uid://cx6qlsj2ywf30" path="res://Scenes/Player.tscn" id="3_4bixy"]
+[ext_resource type="PackedScene" uid="uid://8gqf7mvq1j44" path="res://Scenes/hud.tscn" id="4_wsrpr"]
+[ext_resource type="AudioStream" uid="uid://cngxdrwm02b74" path="res://art/house-in-a-forest-loop.ogg" id="5_wrjmw"]
+[ext_resource type="AudioStream" uid="uid://c833u4v6c8e6d" path="res://art/game-over.wav" id="6_wjc7o"]
+
+[sub_resource type="Curve2D" id="Curve2D_hticx"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1160, 0, 0, 0, 0, 0, 1160, 640, 0, 0, 0, 0, 0, 640, 0, 0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[sub_resource type="GDScript" id="GDScript_dcrki"]
+script/source = "extends Timer
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta: float) -> void:
+	pass
+"
+
+[node name="Main" type="Node"]
+script = ExtResource("1_xyyar")
+mob_scene = ExtResource("2_g6vkr")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.231, 0.2655, 0.3, 1)
+
+[node name="MobPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_hticx")
+
+[node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath"]
+
+[node name="MobTimer" type="Timer" parent="."]
+wait_time = 1.25
+script = SubResource("GDScript_dcrki")
+
+[node name="Player" parent="." instance=ExtResource("3_4bixy")]
+position = Vector2(560, 400)
+
+[node name="HUD" parent="." instance=ExtResource("4_wsrpr")]
+
+[node name="ScoreTimer" type="Timer" parent="."]
+
+[node name="StartTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="StartPosition" type="Marker2D" parent="."]
+position = Vector2(560, 400)
+
+[node name="BackgroundMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_wrjmw")
+
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_wjc7o")
+
+[connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
+[connection signal="hit" from="Player" to="." method="game_over"]
+[connection signal="start_game" from="HUD" to="." method="new_game"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
