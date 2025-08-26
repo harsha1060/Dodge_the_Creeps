@@ -2,12 +2,8 @@ Dodge the Creeps
 
 This is my recreation of the official Godot Engine tutorial game, "Dodge the Creeps," with some personal modifications. This repository contains all the source code and project files.
 
-(Note: You should replace placeholder.png with a real screenshot of your game!)
-
 🎮 How to Play (for Gamers)
 If you just want to play the game, you can download the latest version from the Releases page.
-
-Go to the Releases Page.
 
 Download the .zip file for the latest version.
 
